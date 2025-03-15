@@ -4,10 +4,12 @@ const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const userRoutes = require('./routes/userRoutes');
+const cors = require('cors');
 
 const app = express();
 const MONGO_URI = process.env.MONGO_URI;
 
+app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend/public/app-files')));
 
