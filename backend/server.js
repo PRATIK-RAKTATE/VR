@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const userRoutes = require('./routes/userRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const cors = require('cors');
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend/public/app-files')));
 
 app.use('/api/users', userRoutes);
+app.use('/api/admin', adminRoutes);
 
 // marzipano files
 app.get('/', (req, res) => {
