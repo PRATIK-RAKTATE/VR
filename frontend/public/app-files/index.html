@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>3D Observatory</title>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
+  <style>
+    @-ms-viewport {
+      width: device-width;
+    }
+  </style>
+  <link rel="stylesheet" href="vendor/reset.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="multiple-scenes view-control-buttons">
+  
+</head>
+<body>
+  <div id="pano"></div>
+  
+  <!-- Audio element for scene sounds -->
+  <audio id="audioPlayer" src=""></audio>
+  
+  <div id="sceneList">
+    <ul class="scenes">
+      <!-- replace with pvg logo -->
+      <h1 style="padding-top: 13px; padding-left: 15px; border-radius: 5px">
+        PVG 
+      </h1>
+
+      <!-- <select id="sceneDropdown">
+          <option value="0-telescopes">Telescopes</option>
+          <option value="1-observatry">Observatry</option>
+          <option value="0-comp">Computer Department</option>
+          <option value="2-new-home">New Home</option>
+          <option value="3-dom">Dom</option>
+        </select> -->
+
+      <select id="sceneDropdown">
+        <optgroup label="Campus View">
+          <option value="2-building-in-construction">Campus</option>
+          <option value="0-computer-lab">Computer Department</option>
+          <option value="3-library-2-1">Library</option>
+          <option value="1-entry-account-section">Account Section</option>
+          <option value="4-entry-principal">Entry section</option>
+        </optgroup>
+        <optgroup label="Computer Department">
+          <option value="0-library">Library</option>
+          <option value="principal-entry">Principal Entry</option>
+          <option value="account-section-entry">Account Section Entry</option>
+        </optgroup>
+      </select>
+
+      <select id="sceneDropdown">
+        <optgroup value="0-telescopes" label="New Building - First Floor">
+          <option value="1-classroom">Classrooms (101-106)</option>
+          <option value="0-library">Library &amp; Reading Room (107)</option>
+          <option value="0-library">Language Lab (108)</option>
+          <option value="new-first-cadcam">CAD/CAM Lab (109)</option>
+          <option value="new-first-girls">Girls Common Room</option>
+          <option value="new-first-it">IT Department</option>
+          <option value="0-comp">Computer Department</option>
+        </optgroup>
+        <optgroup label="New Building - Ground Floor">
+          <option value="new-ground-classrooms">Classrooms (001-006)</option>
+          <option value="new-ground-computer">Computer Center (007)</option>
+          <option value="new-ground-mechanical">Mechanical Department</option>
+          <option value="new-ground-seminar">Seminar Hall (016)</option>
+          <option value="new-ground-account">Account Section (A1)</option>
+          <option value="new-ground-principal">Principal Office (A3)</option>
+          <option value="new-ground-tpo">TPO Office (A6)</option>
+          <option value="new-ground-director">Director Office (A4)</option>
+          <option value="new-ground-student">Student Section (A7)</option>
+        </optgroup>
+        <optgroup label="New Building - Basement">
+          <option value="new-basement-aids">AIDS HOD (B1)</option>
+          <option value="new-basement-ai">
+            Artificial Intelligence Lab (B2)
+          </option>
+          <option value="new-basement-cloud">Cloud Computing Lab (B3)</option>
+        </optgroup>
+        <optgroup label="Old Building - Ground Floor">
+          <option value="old-ground-medical">Medical Room</option>
+          <option value="old-ground-nss">NSS SDO Office</option>
+          <option value="old-ground-sports">Sports Room</option>
+          <option value="old-ground-computerlab1">Computer Lab 1</option>
+          <option value="old-ground-workshop">Workshop</option>
+        </optgroup>
+        <optgroup label="Old Building - 1st Floor">
+          <option value="old-first-computerlab">Computer Lab</option>
+          <option value="old-first-tutorial">Tutorial Room</option>
+          <option value="old-first-mba">MBA Staff Room</option>
+          <option value="old-first-seminar">Seminar Hall</option>
+        </optgroup>
+        <optgroup label="Old Building - 2nd Floor">
+          <option value="old-second-hardware">Hardware Lab</option>
+          <option value="old-second-project">Project Lab (IT)</option>
+          <option value="old-second-incubation">Incubation Center</option>
+        </optgroup>
+        <optgroup label="Premises Spots">
+          <option value="premises-360view">360° View of Whole Campus</option>
+          <option value="premises-entry">Entry Gate</option>
+          <option value="premises-oldentrance">Old Building Entrance</option>
+          <option value="premises-ground">Ground</option>
+          <option value="premises-shadeparking">Shade Parking</option>
+          <option value="premises-exam">Exam Centre Parking</option>
+          <option value="premises-canteen">Canteen</option>
+          <option value="premises-bike">Bike Parking</option>
+          <option value="premises-office">Office Entrance</option>
+          <option value="premises-aids">AIDS Department Entrance</option>
+        </optgroup>
+      </select>
+      <style>
+        body {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          background: #f4f4f4;
+        }
+
+        .navbar {
+          background: #333;
+          display: flex;
+          padding: 10px;
+          position: relative;
+          z-index: 1;
+        }
+
+        .nav-item {
+          position: relative;
+          margin-right: 20px;
+        }
+
+        /* Hide the checkboxes */
+        .nav-checkbox {
+          display: none;
+        }
+
+        /* Style the trigger as a clickable navbar item */
+        .dropdown-trigger {
+          color: white;
+          padding: 10px 15px;
+          background: #333;
+          cursor: pointer;
+          display: inline-block;
+        }
+
+        .dropdown-trigger:hover {
+          background: #555;
+        }
+
+        /* Dropdown menu styling */
+        .dropdown-menu {
+          display: none;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          background: #444;
+          min-width: 250px;
+          padding: 10px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+          z-index: 2;
+        }
+
+        /* When the checkbox is checked, show the dropdown */
+        .nav-checkbox:checked~.dropdown-menu {
+          display: block;
+        }
+
+        /* The overlay covers the viewport when the dropdown is open */
+        .overlay {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: transparent;
+          z-index: 1;
+        }
+
+        /* When the checkbox is checked, show the overlay */
+        .nav-checkbox:checked~.overlay {
+          display: block;
+        }
+
+        .dropdown-menu ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .dropdown-menu li {
+          padding: 5px 0;
+          color: white;
+          cursor: pointer;
+        }
+
+        .dropdown-menu li:hover {
+          background: #555;
+        }
+
+        .group-title {
+          font-weight: bold;
+          margin: 10px 0 5px;
+          color: #ddd;
+        }
+      </style>
+
+      <a href="javascript:void(0)" class="scene" data-id="0-computer-lab">
+        <!-- <li class="text">computer-lab</li> -->
+      </a>
+
+      <a href="javascript:void(0)" class="scene" data-id="2-building-in-construction">
+      </a>
+
+      <a href="javascript:void(0)" class="scene" data-id="4-entry-principal">
+      </a>
+
+      <a href="javascript:void(0)" class="scene" data-id="1-entry-account-section">
+      </a>
+
+      <a href="javascript:void(0)" class="scene" data-id="3-library-2-1">
+      </a>
+
+      <a href="javascript:void(0)" class="scene" data-id="0-telescopes">
+        <!-- <li class="text">Telescopes</li> -->
+      </a>
+
+      <a href="javascript:void(0)" class="scene" data-id="0-comp">
+        <!-- <li class="text">Telescopes</li> -->
+      </a>
+
+      <a href="javascript:void(0)" class="scene" data-id="1-classroom">
+        <!-- <li class="text">Telescopes</li> -->
+      </a>
+
+      <a href="javascript:void(0)" class="scene" data-id="0-library"> </a>
+
+      <a href="javascript:void(0)" class="scene" data-id="1-observatry">
+        <!-- <li class="text">Observatry</li> -->
+      </a>
+
+      <a href="javascript:void(0)" class="scene" data-id="2-new-home">
+        <!-- <li class="text">new home</li> -->
+      </a>
+
+      <a href="javascript:void(0)" class="scene" data-id="3-dom">
+        <!-- <li class="text">dom</li> -->
+      </a>
+    </ul>
+  </div>
+
+  <!-- <div id="titleBar">
+    <h1 class="sceneName"></h1>
+  </div> -->
+
+  <a href="javascript:void(0)" id="autorotateToggle">
+    <img class="icon off" src="img/play.png" />
+    <img class="icon on" src="img/pause.png" />
+    <img src="./img/exit.png" alt="Exit" class="exit-arrow" id="exitArrow" />
+  </a>
+
+  <a href="javascript:void(0)" id="fullscreenToggle">
+    <img class="icon off" src="img/fullscreen.png" />
+    <img class="icon on" src="img/windowed.png" />
+  </a>
+
+  <a href="javascript:void(0)" id="sceneListToggle">
+    <!-- <img class="icon off" src="img/expand.png" /> -->
+    <!-- <img class="icon on" src="img/collapse.png" /> -->
+  </a>
+
+  <nav class="bottom-buttons">
+    <a href="javascript:void(0)" id="viewUp" class="viewControlButton viewControlButton-1">
+      <img class="icon" src="img/up arrow.png" />
+    </a>
+    <a href="javascript:void(0)" id="viewDown" class="viewControlButton viewControlButton-2">
+      <img class="icon" src="img/down arrow.png" />
+    </a>
+    <a href="javascript:void(0)" id="viewLeft" class="viewControlButton viewControlButton-3">
+      <img class="icon" src="img/left arrow.png" />
+    </a>
+    <a href="javascript:void(0)" id="viewRight" class="viewControlButton viewControlButton-4">
+      <img class="icon" src="img/right arrow.png" />
+    </a>
+    <a href="javascript:void(0)" id="viewIn" class="viewControlButton viewControlButton-5">
+      <img class="icon" src="img/plus-icon.png" />
+    </a>
+    <a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-6">
+      <img class="icon" src="img/minus-icon.png" />
+    </a>
+
+    <!-- vr logo -->
+    <a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-7">
+      <img class="icon" src="img/vr.png" />
+    </a>
+  </nav>
+
+  <script src="vendor/screenfull.min.js"></script>
+  <script src="vendor/bowser.min.js"></script>
+  <script src="vendor/marzipano.js"></script>
+
+  <script src="data.js"></script>
+  <script src="index.js"></script>
+
+  <script>
+    document
+      .getElementById("exitArrow")
+      .addEventListener("click", function () {
+        // If there's a previous page in history, go back.
+        if (history.length > 2) {
+          history.back();
+        } else {
+          // Otherwise, redirect to a fallback page.
+          window.location.href = "index.html";
+        }
+      });
+
+      //audio
+      let dropdown = document.getElementById("sceneDropdown");
+      let audioPlayer = document.getElementById("audioPlayer");
+
+      dropdown.addEventListener("change", function () {
+        let selectedValue = dropdown.value; // Get selected value
+        let audioSrc = "audio/scene1.mp3"; // Default empty audio source
+
+        // Use switch case to assign the correct audio file
+        switch (selectedValue) {
+          case "2-building-in-construction":
+            audioSrc = "audio/scene1.mp3";
+            break;
+          case "0-computer-lab":
+            audioSrc = "audio/scene1.mp3";
+            break;
+          case "3-library-2-1":
+            audioSrc = "audio/scene1.mp3";
+            break;
+          case "1-classroom":
+            audioSrc = "audio/scene1.mp3";
+            break;
+          case "3-dom":
+            audioSrc = "audio/scene1.mp3";
+            break;
+          default:
+            audioSrc = ""; // No valid selection
+        }
+
+        if (audioSrc) {
+          audioPlayer.src = audioSrc;
+          audioPlayer.load(); // Ensure the audio file is loaded
+          audioPlayer
+            .play()
+            .catch((error) => console.log("Autoplay blocked:", error));
+        } else {
+          audioPlayer.pause();
+          audioPlayer.currentTime = 0;
+        }
+      });
+  </script>
+
+</body>
+
+</html>
