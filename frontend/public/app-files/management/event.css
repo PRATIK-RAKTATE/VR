@@ -1,0 +1,53 @@
+.header {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+}
+.icon-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.icon-title i {
+  font-size: 2rem;
+  color: #ff6600;
+}
+.go-home a {
+  text-decoration: none;
+  color: white;
+  background: linear-gradient(to right, #ff6600, #ff0000);
+  padding: 8px 15px;
+  border-radius: 5px;
+}
+
+/* Search Bar */
+.search-bar {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.label-form {
+  background: linear-gradient(to right, #ff6600, #ff0000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 14px;
+}
+#modalLabel {
+  background: linear-gradient(to right, #ff6600, #ff0000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+/* To add images icon */
+.text-gradient {
+  background: linear-gradient(to right, #ff6600, #ff0000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
