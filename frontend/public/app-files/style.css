@@ -969,7 +969,7 @@ body.view-control-buttons .viewControlButton {
   transform: scale(1.1);
 }
 
-#sceneDropdown {
+#sceneDropdown, #sceneDropdown2{
   background-color: transparent;
   color: white;
   font-family: poppins;
@@ -978,19 +978,19 @@ body.view-control-buttons .viewControlButton {
   border: none;
 }
 
-#sceneDropdown option {
+#sceneDropdown option,#sceneDropdown2 option {
   color: rgb(255, 255, 255);
   background-color: #4c5360;
   font-family: poppins;
   border: none;
 }
 
-#sceneDropdown option:hover {
+#sceneDropdown option:hover,#sceneDropdown2 option:hover {
   background-color: transparent;
   border: none;
 }
 
-#sceneDropdown:focus {
+#sceneDropdown:focus, #sceneDropdown2:focus {
   outline: none;
 }
 

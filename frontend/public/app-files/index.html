@@ -41,31 +41,26 @@
 
       <select id="sceneDropdown">
         <optgroup label="Campus View">
-          <option value="2-building-in-construction">Campus</option>
+          <option value="3-building-in-construction">Campus</option>
+          <option value="4-building-parking">Parking</option>
           <option value="0-computer-lab">Computer Department</option>
-          <option value="3-library-2-1">Library</option>
+          <option value="2-notice-board-admission-section-entry">Entry</option>
           <option value="1-entry-account-section">Account Section</option>
-          <option value="4-entry-principal">Entry section</option>
-        </optgroup>
-        <optgroup label="Computer Department">
-          <option value="0-library">Library</option>
-          <option value="principal-entry">Principal Entry</option>
-          <option value="account-section-entry">Account Section Entry</option>
+          <option value="1-interview-cabin-1">Interview-cabin-1</option>
         </optgroup>
       </select>
 
-      <select id="sceneDropdown">
-        <optgroup value="0-telescopes" label="New Building - First Floor">
-          <option value="1-classroom">Classrooms (101-106)</option>
-          <option value="0-library">Library &amp; Reading Room (107)</option>
-          <option value="0-library">Language Lab (108)</option>
-          <option value="new-first-cadcam">CAD/CAM Lab (109)</option>
-          <option value="new-first-girls">Girls Common Room</option>
-          <option value="new-first-it">IT Department</option>
-          <option value="0-comp">Computer Department</option>
+      <select id="sceneDropdown2">
+        
+        <optgroup label="Computer Department">
+          <option value="0-computer-lab">Computer Department</option>
+          <option value="5-entry-principal">Entry-view</option>
+          <option value="2-notice-board-admission-section-entry">Notice board</option>
         </optgroup>
-        <optgroup label="New Building - Ground Floor">
-          <option value="new-ground-classrooms">Classrooms (001-006)</option>
+        
+      </select>
+        <!-- <optgroup label="New Building - Ground Floor">
+          <option value="new-ground-classrooms">Computer Dept</option>
           <option value="new-ground-computer">Computer Center (007)</option>
           <option value="new-ground-mechanical">Mechanical Department</option>
           <option value="new-ground-seminar">Seminar Hall (016)</option>
@@ -111,104 +106,8 @@
           <option value="premises-bike">Bike Parking</option>
           <option value="premises-office">Office Entrance</option>
           <option value="premises-aids">AIDS Department Entrance</option>
-        </optgroup>
-      </select>
-      <style>
-        body {
-          margin: 0;
-          font-family: Arial, sans-serif;
-          background: #f4f4f4;
-        }
-
-        .navbar {
-          background: #333;
-          display: flex;
-          padding: 10px;
-          position: relative;
-          z-index: 1;
-        }
-
-        .nav-item {
-          position: relative;
-          margin-right: 20px;
-        }
-
-        /* Hide the checkboxes */
-        .nav-checkbox {
-          display: none;
-        }
-
-        /* Style the trigger as a clickable navbar item */
-        .dropdown-trigger {
-          color: white;
-          padding: 10px 15px;
-          background: #333;
-          cursor: pointer;
-          display: inline-block;
-        }
-
-        .dropdown-trigger:hover {
-          background: #555;
-        }
-
-        /* Dropdown menu styling */
-        .dropdown-menu {
-          display: none;
-          position: absolute;
-          top: 100%;
-          left: 0;
-          background: #444;
-          min-width: 250px;
-          padding: 10px;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-          z-index: 2;
-        }
-
-        /* When the checkbox is checked, show the dropdown */
-        .nav-checkbox:checked~.dropdown-menu {
-          display: block;
-        }
-
-        /* The overlay covers the viewport when the dropdown is open */
-        .overlay {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background: transparent;
-          z-index: 1;
-        }
-
-        /* When the checkbox is checked, show the overlay */
-        .nav-checkbox:checked~.overlay {
-          display: block;
-        }
-
-        .dropdown-menu ul {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-        }
-
-        .dropdown-menu li {
-          padding: 5px 0;
-          color: white;
-          cursor: pointer;
-        }
-
-        .dropdown-menu li:hover {
-          background: #555;
-        }
-
-        .group-title {
-          font-weight: bold;
-          margin: 10px 0 5px;
-          color: #ddd;
-        }
-      </style>
-
+        </optgroup> -->
+        
       <a href="javascript:void(0)" class="scene" data-id="0-computer-lab">
         <!-- <li class="text">computer-lab</li> -->
       </a>

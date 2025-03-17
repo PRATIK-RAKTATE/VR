@@ -397,6 +397,16 @@
             switchScene(selectedScene);
         }
     });
+    
+    const sceneDropdown2 = document.getElementById('sceneDropdown2');
+
+    sceneDropdown2.addEventListener('change', function() {
+        const selectedSceneId = this.value;
+        const selectedScene = findSceneById(selectedSceneId);
+        if (selectedScene) {
+            switchScene(selectedScene);
+        }
+    });
   
     // Display the initial scene.
     switchScene(scenes[0]);
