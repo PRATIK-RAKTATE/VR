@@ -1058,3 +1058,83 @@ body.view-control-buttons .viewControlButton {
 .event-btn:hover {
   background: linear-gradient(to right, red, orange);
 }
+
+/* Chatbot icon styling */
+.chatbot-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #ff9d0a;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+/* Chat popup styling */
+.chat-popup {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 300px;
+  max-height: 400px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.chat-header {
+  background: #ff9d0a;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.chat-body {
+  padding: 10px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.chat-input {
+  display: flex;
+  border-top: 1px solid #ccc;
+}
+
+.chat-input input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+}
+
+.chat-input button {
+  border: none;
+  background: #ff9d0a;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* Message styles */
+.message {
+  margin-bottom: 10px;
+}
+
+.user-msg {
+  text-align: right;
+  color: blue;
+}
+
+.bot-msg {
+  text-align: left;
+  color: green;
+}
