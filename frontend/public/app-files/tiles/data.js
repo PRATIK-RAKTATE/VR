@@ -1,6 +1,33 @@
 var APP_DATA = {
   "scenes": [
     {
+      "id": "1-computerlab",
+      "name": "computerlab",
+      "levels": [
+        {
+          "tileSize": 256,
+          "size": 256,
+          "fallbackOnly": true
+        },
+        {
+          "tileSize": 512,
+          "size": 512
+        },
+        {
+          "tileSize": 512,
+          "size": 1024
+        }
+      ],
+      "faceSize": 1024,
+      "initialViewParameters": {
+        "pitch": 0,
+        "yaw": 0,
+        "fov": 1.5707963267948966
+      },
+      "linkHotspots": [],
+      "infoHotspots": []
+    },
+    {
       "id": "2-building-in-construction",
       "name": "building-in-construction",
       "levels": [
@@ -143,33 +170,6 @@ var APP_DATA = {
     {
       "id": "0-building-side-view",
       "name": "building side view",
-      "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        }
-      ],
-      "faceSize": 1024,
-      "initialViewParameters": {
-        "pitch": 0,
-        "yaw": 0,
-        "fov": 1.5707963267948966
-      },
-      "linkHotspots": [],
-      "infoHotspots": []
-    },
-    {
-      "id": "1-computerlab",
-      "name": "computerlab",
       "levels": [
         {
           "tileSize": 256,
