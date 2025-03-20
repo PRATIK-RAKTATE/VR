@@ -215,8 +215,8 @@ body.fullscreen-enabled #fullscreenToggle {
 
 #fullscreenToggle .icon {
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 12px;
+  right: 10px;
   width: 30px;
   height: 30px;
 }
@@ -270,7 +270,7 @@ body.fullscreen-enabled.mobile #autorotateToggle {
 
 #autorotateToggle .icon {
   position: absolute;
-  top: 5px;
+  top: 12px;
   right: 14px;
   width: 30px;
   height: 30px;
@@ -962,7 +962,7 @@ body.view-control-buttons .viewControlButton {
   cursor: pointer;
   transition: transform 0.2s ease;
   position: fixed;
-  top: 6px;
+  top: 12px;
   right: 105px;
 }
 .exit-arrow:hover {
@@ -1049,6 +1049,7 @@ body.view-control-buttons .viewControlButton {
   background: linear-gradient(to right, orange, red);
   color: white;
   padding: 12px 24px;
+  margin-left: 2rem;
   font-size: 16px;
   border: none;
   border-radius: 5px;
