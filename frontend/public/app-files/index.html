@@ -240,6 +240,24 @@
     </a>
   </nav>
 
+    <!-- Chatbot Icon -->
+<div class="chatbot-icon" id="chatbotIcon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-robot" viewBox="0 0 16 16">
+  <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a25 25 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135"/>
+  <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5"/>
+</svg></div>
+
+<!-- Chat Popup -->
+<div class="chat-popup" id="chatPopup">
+  <div class="chat-header">Ask your doubt</div>
+  <div class="chat-body" id="chatBody">
+    <!-- Chat messages will appear here -->
+  </div>
+  <div class="chat-input">
+    <input type="text" id="chatInput" placeholder="Type your question..." class="form-control" />
+    <button id="sendBtn">Send</button>
+  </div>
+</div>
+
   <script src="vendor/screenfull.min.js"></script>
   <script src="vendor/bowser.min.js"></script>
   <script src="vendor/marzipano.js"></script>
@@ -309,6 +327,199 @@
           audioPlayer.currentTime = 0;
         }
       });
+
+      // Toggle chat popup visibility
+const chatbotIcon = document.getElementById('chatbotIcon');
+const chatPopup = document.getElementById('chatPopup');
+const sendBtn = document.getElementById('sendBtn');
+const chatInput = document.getElementById('chatInput');
+const chatBody = document.getElementById('chatBody');
+
+chatbotIcon.addEventListener('click', () => {
+  chatPopup.style.display = chatPopup.style.display === 'flex' ? 'none' : 'flex';
+});
+
+// Predefined Q&A pairs (add your 20 questions and answers here)
+const qaPairs = {
+  "Where is PVG Nashik located?": "206, Behind Reliance Petrol Pump, Dindori Road, Mhasrul, Nashik – 422004, Maharashtra, India.",
+  "When was PVG Nashik established?": "Established in 2010.",
+  "Which university is PVG Nashik affiliated with?": "Affiliated with Savitribai Phule Pune University.",
+  "Is PVG Nashik AICTE approved?": "Yes, approved by AICTE, New Delhi.",
+  "What undergraduate courses are offered?": "B.E. in Mechanical, Computer, IT, E&TC, and AI & DS.",
+  "Does PVG Nashik offer an MBA program?": "Yes, MBA is available.",
+  "What is the campus size?": "The campus spans over 20 acres in Mhasrul, Nashik.",
+  "Does the college have a library?": "Yes, with a vast collection of books and digital resources.",
+  "Are there hostel facilities?": "Hostel facility details are not provided.",
+  "Is there a gym on campus?": "Yes, gym facilities are available.",
+  "Does PVG Nashik have Wi-Fi?": "Yes, the campus has excellent Wi-Fi connectivity.",
+  "How is the placement record?": "The college has a consistent 100% placement record.",
+  "Which companies visit for placements?": "Companies like Bajaj Finserv, ICICI Securities, Hexaware, and Winjit.",
+  "What is the dress code for students?": "Students must wear a yellow shirt and black trousers.",
+  "What are the attendance requirements?": "A minimum of 75% attendance is mandatory.",
+  "How can I contact the college?": "Call 0253-6480036 or email pvgcoenashik@gmail.com.",
+  "What is the official website?": "https://www.pvgcoenashik.org/",
+  "Does PVG Nashik have social media?": "Yes, on Facebook and LinkedIn.",
+  "Are there clubs and societies?": "Yes, various technical and cultural clubs are available.",
+  "Does the college host events?": "Yes, workshops, seminars, and cultural events are held.",
+  "What MBA specializations are available?": "Finance, Marketing, HR, Operations, and Business Analytics.",
+  "Is there a student code of conduct?": "Yes, including dress code and attendance policies.",
+  "Does the college offer distance education?": "No details available.",
+  "Are there sports facilities?": "No specific details available.",
+  "Is there a student union?": "No details available.",
+  "What is the student-to-teacher ratio?": "Not specified.",
+  "Are there canteen facilities?": "Not mentioned.",
+  "Does PVG Nashik offer scholarships?": "No specific details available.",
+  "What are the admission requirements?": "Based on MHT CET or JEE Main.",
+  "Is there a placement cell?": "Yes, ensuring 100% placements.",
+  "Are internships available?": "Not specified.",
+  "Does the college offer career counseling?": "Not mentioned.",
+  "What is the fee structure?": "Not provided.",
+  "Are education loans available?": "No details available.",
+  "What are the admission deadlines?": "Not specified.",
+  "Is lateral entry available?": "Not mentioned.",
+  "Is the campus safe?": "No specific details available.",
+  "Are there medical facilities?": "Not mentioned.",
+  "Is there an alumni network?": "Not specified.",
+  "Are networking events held?": "No details available.",
+  "Can I take a virtual tour?": "Not mentioned.",
+  "How can I get more information?": "Visit the official website or contact the college.",
+   "Hi": "Hello! How can I assist you today?",
+  "Hello": "Hi there! What do you need help with?",
+  "Hey": "Hey! How can I help?",
+  "Good morning": "Good morning! What would you like to know?",
+  "Good afternoon": "Good afternoon! How can I assist you?",
+  "Good evening": "Good evening! How can I help?",
+  "How are you?": "I'm just a chatbot, but I'm here to assist you!",
+  "What is your name?": "I'm your virtual assistant, here to help!",
+  "What can you do?": "I can answer questions about the college, admission, events, and more!",
+  
+  // Admission-related queries
+  "What are the admission requirements?": "You need to submit your academic records, ID proof, and complete the entrance test if required.",
+  "Is there an entrance exam?": "Yes, some courses require an entrance ex am. Please check the admission guidelines.",
+  "What is the last date to apply?": "The last date for applications varies by course. Please check the official website for details.",
+  "Can I apply offline?": "No, all applications must be submitted online through our portal.",
+  
+  // Fees & Scholarship Queries
+  "What is the tuition fee?": "The tuition fee depends on the course. Please check the website for detailed fee structures.",
+  "Are there any scholarships available?": "Yes, we offer merit-based and need-based scholarships.",
+  "How can I apply for a scholarship?": "You can apply for scholarships during the admission process by submitting the required documents.",
+  
+  // Facilities & Campus Life
+  "Is there a hostel facility?": "Yes, we provide hostel accommodation for students.",
+  "Are there sports facilities?": "Yes, we have a sports complex with various indoor and outdoor sports.",
+  "Does the campus have WiFi?": "Yes, our campus provides free WiFi for students.",
+  "Where is the cafeteria?": "The cafeteria is located near the main building.",
+  
+  // Exams & Academics
+  "When do exams start?": "Exam dates are announced on the academic calendar. Please check the website.",
+  "How can I get my exam schedule?": "The exam schedule is available on the student portal.",
+  "What is the grading system?": "We follow a CGPA-based grading system.",
+  
+  // Events & Activities
+  "Are there cultural events?": "Yes, we organize annual cultural and technical festivals.",
+  "How can I join clubs?": "You can sign up for clubs at the student activity center.",
+  
+  // Contact & Support
+  "How can I contact the college office?": "You can reach us via email or visit the administration office.",
+  "Where can I find my student ID?": "You can get your student ID from the student affairs department."
+};
+
+/* --- Fuzzy Matching Functions --- */
+
+// Levenshtein distance algorithm to compute edit distance between two strings
+function levenshteinDistance(a, b) {
+  const matrix = [];
+
+  // Increment along the first column of each row
+  for (let i = 0; i <= b.length; i++) {
+      matrix[i] = [i];
+  }
+
+  // Increment each column in the first row
+  for (let j = 0; j <= a.length; j++) {
+      matrix[0][j] = j;
+  }
+
+  // Fill in the rest of the matrix
+  for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+          if (b.charAt(i - 1) === a.charAt(j - 1)) {
+              matrix[i][j] = matrix[i - 1][j - 1];
+          } else {
+              matrix[i][j] = Math.min(
+                  matrix[i - 1][j - 1] + 1, // substitution
+                  matrix[i][j - 1] + 1,     // insertion
+                  matrix[i - 1][j] + 1      // deletion
+              );
+          }
+      }
+  }
+  return matrix[b.length][a.length];
+}
+
+// Function to get a similarity score between 0 and 1
+function getSimilarity(a, b) {
+  const distance = levenshteinDistance(a, b);
+  return 1 - distance / Math.max(a.length, b.length);
+}
+
+// Enhanced getBotResponse using fuzzy matching
+function getBotResponse(userInput) {
+  let bestMatch = null;
+  let bestScore = 0;
+
+  // Compare user input with each predefined question
+  for (let question in qaPairs) {
+      const score = getSimilarity(userInput.toLowerCase(), question.toLowerCase());
+      if (score > bestScore) {
+          bestScore = score;
+          bestMatch = question;
+      }
+  }
+
+  // If the best match score is above a threshold (e.g., 0.5), return its answer
+  if (bestScore >= 0.5) {
+      return qaPairs[bestMatch];
+  }
+  return "I'm sorry, I don't understand that. Could you please ask a different question?";
+}
+
+// Append messages to the chat body
+function appendMessage(sender, text) {
+  const messageDiv = document.createElement('div');
+  messageDiv.classList.add('message', sender === 'user' ? 'user-msg' : 'bot-msg');
+  messageDiv.textContent = text;
+  chatBody.appendChild(messageDiv);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// Send button click event handler
+sendBtn.addEventListener('click', () => {
+  const userText = chatInput.value.trim();
+  if (userText === "") return;
+
+  // Append user message
+  appendMessage('user', userText);
+
+  // Get bot response using fuzzy matching logic
+  const botResponse = getBotResponse(userText);
+
+  // Simulate a small delay for a natural feel
+  setTimeout(() => {
+    appendMessage('bot', botResponse);
+  }, 500);
+
+  // Clear input field
+  chatInput.value = "";
+});
+
+// Allow sending messages via the Enter key
+chatInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    sendBtn.click();
+  }
+});
+
   </script>
 
 </body>
