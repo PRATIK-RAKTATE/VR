@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Authentication Page</title>
+  <!-- Font Awesome CSS for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p1Cm+DKvMtFv/PKJ6tZbZzHLMZYKWDhL+HnzgMJo/Ao65Ux9jYFx2ck2VvyHUnBKwU/hG4tHRf5hX2yfL9ZxgQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ff0000, #ff6600);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #333;
+      line-height: 1.6;
+    }
+    /* Fade-in animation */
+    .auth-container {
+      background: #fff;
+      width: 480px;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .auth-container h2 {
+      margin-bottom: 20px;
+      font-weight: 600;
+      color: #333;
+      font-size: 1.8em;
+      transition: transform 0.3s ease-in-out;
+    }
+    .auth-container form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    /* Smooth input focus animation */
+    .auth-container form input {
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s ease, transform 0.2s ease-in-out;
+    }
+    .auth-container form input:focus {
+      border-color: #ff6600;
+      transform: scale(1.05);
+    }
+    /* Button hover scaling effect */
+    .auth-container form button {
+      padding: 12px;
+      background: #ff6600;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease-in-out;
+    }
+    .auth-container form button:hover {
+      background: #e60000;
+      transform: scale(1.05);
+    }
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+    .toggle-link {
+      font-size: 14px;
+      margin-top: 10px;
+      color: #ff6600;
+      cursor: pointer;
+      transition: color 0.3s ease-in-out;
+    }
+    .toggle-link:hover {
+      text-decoration: underline;
+      color: #e60000;
+    }
+    .users-panel {
+      margin-top: 20px;
+      text-align: left;
+      font-size: 14px;
+      background: #f9f9f9;
+      border: 1px solid #eee;
+      border-radius: 5px;
+      padding: 10px;
+    }
+    .delete-icon {
+      cursor: pointer;
+      color: red;
+      transition: transform 0.2s ease-in-out;
+    }
+    .delete-icon:hover {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <h2 id="formTitle">Login</h2>
+    <form id="authForm">
+      <input type="email" id="email" placeholder="Enter Email" required>
+      <input type="password" id="password" placeholder="Enter Password" required>
+      <div id="rememberContainer" class="remember-me" style="display: none;">
+        <input type="checkbox" id="rememberMe">
+        <label for="rememberMe">Remember Me</label>
+      </div>
+      <button type="submit" id="submitBtn">Submit</button>
+    </form>
+    <p class="toggle-link" id="toggleForm">Don't have an account? <strong>Sign Up</strong></p>
+    <div class="users-panel" id="usersPanel">
+      <h3>Saved Users</h3>
+      <ul id="usersList"></ul>
+    </div>
+  </div>
+
+  <script>
+    function getUsers() {
+      let users = localStorage.getItem("users");
+      return users ? JSON.parse(users) : [];
+    }
+    function saveUsers(users) {
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+    function updateUsersPanel() {
+      const usersList = document.getElementById("usersList");
+      usersList.innerHTML = "";
+      const users = getUsers();
+      if (users.length === 0) {
+        usersList.innerHTML = "<li>No users registered yet.</li>";
+      } else {
+        users.forEach(user => {
+          usersList.innerHTML += `<li>${user.email} <i class="fas fa-trash delete-icon" onclick="deleteUser('${user.email}')"></i></li>`;
+        });
+      }
+    }
+    function deleteUser(email) {
+      if (confirm("Are you sure you want to delete this user?")) {
+        let users = getUsers().filter(user => user.email.toLowerCase() !== email.toLowerCase());
+        saveUsers(users);
+        updateUsersPanel();
+        alert("User deleted successfully!");
+      }
+    }
+    updateUsersPanel();
+
+    const formTitle = document.getElementById("formTitle");
+    const authForm = document.getElementById("authForm");
+    const toggleForm = document.getElementById("toggleForm");
+    const rememberContainer = document.getElementById("rememberContainer");
+
+    let isLogin = true;
+
+    toggleForm.addEventListener("click", function(e) {
+      e.preventDefault();
+      isLogin = !isLogin;
+      formTitle.style.transform = "scale(0.9)";
+      setTimeout(() => {
+        formTitle.textContent = isLogin ? "Login" : "Sign Up";
+        toggleForm.innerHTML = isLogin ? "Don't have an account? <strong>Sign Up</strong>" : "Already have an account? <strong>Login</strong>";
+        rememberContainer.style.display = isLogin ? "flex" : "none";
+        formTitle.style.transform = "scale(1)";
+      }, 200);
+    });
+
+    authForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert(isLogin ? "Login Successful!" : "Signup Successful!");
+      window.location.href = "/frontend/public/app-files/management/event.html";
+    });
+  </script>
+</body>
+</html>
