@@ -3,160 +3,284 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Authentication Page</title>
+  <title>Event Authentication</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
     * { box-sizing: border-box; }
     body {
-      margin: 0; font-family: 'Poppins', sans-serif;
-  
-      display: flex; align-items: center; justify-content: center;
-      min-height: 100vh; color: #333; line-height: 1.6;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ece9e6, #ffffff);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
+    /* Main Authentication Container */
     .auth-container {
-      background: #fff; width: 480px; padding: 30px; border-radius: 10px;
-      box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1); text-align: center;
-      animation: fadeIn 0.8s ease-out forwards;
+      background: #fff;
+      width: 400px;
+      max-width: 100%;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeIn 0.8s forwards;
+      transition: transform 0.3s ease;
+    }
+    .auth-container:hover {
+      transform: translateY(0);
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
     .auth-container h2 {
-      margin-bottom: 20px; font-weight: 600; color: #333; font-size: 1.8em;
-      transition: transform 0.3s ease-in-out;
+      margin-bottom: 25px;
+      font-size: 1.9em;
+      color: #333;
     }
     form {
-      display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
     input {
-      padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px;
-      font-size: 16px; outline: none; transition: border-color 0.3s ease;
+      padding: 12px 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border-color 0.3s ease, transform 0.2s ease;
     }
-    input:focus { border-color: #ff6600; transform: scale(1.05); }
+    input:focus { 
+      border-color: #ff6600;
+      transform: scale(1.02);
+      outline: none;
+    }
     button {
-      padding: 12px; background: #ff6600; border: none; color: #fff;
-      font-size: 16px; border-radius: 5px; cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease-in-out;
+      padding: 12px;
+      background: #ff6600;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
-    button:hover { background: #e60000; transform: scale(1.05); }
-    .toggle-link {
-      font-size: 14px; margin-top: 10px; color: #ff6600; cursor: pointer;
-      transition: color 0.3s ease-in-out;
+    button:hover {
+      background: #e65c00;
+      transform: scale(1.02);
     }
-    .toggle-link:hover { text-decoration: underline; color: #e60000; }
-    .users-panel {
-      margin-top: 20px; text-align: left; font-size: 14px;
-      background: #f9f9f9; border: 1px solid #eee;
-      border-radius: 5px; padding: 10px;
+    /* Modal Overlay & Content */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      animation: fadeInOverlay 0.6s ease;
     }
-    .delete-icon {
-      cursor: pointer; color: red; transition: transform 0.2s ease-in-out;
+    @keyframes fadeInOverlay {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
-    .delete-icon:hover { transform: scale(1.2); }
+    .modal-content {
+      background: #fff;
+      padding: 25px 20px;
+      border-radius: 10px;
+      width: 320px;
+      max-width: 90%;
+      text-align: center;
+      animation: popIn 0.5s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-content h3 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .modal-content button {
+      margin: 8px 0;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .modal-content button:hover {
+      transform: scale(1.02);
+    }
+    .hidden { display: none; }
+    /* Popup notifications */
+    .popup {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-size: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateY(-20px);
+      z-index: 2100;
+      animation: slideDown 0.5s ease forwards;
+    }
+    .popup.success { background: #28a745; color: #fff; }
+    .popup.error { background: #d32f2f; color: #fff; }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-out { animation: fadeOut 0.5s ease forwards; }
+    @keyframes fadeOut { to { opacity: 0; } }
   </style>
 </head>
 <body>
-  <div class="auth-container">
-    <h2 id="formTitle">Login</h2>
-    <form id="authForm">
-      <input type="email" id="email" placeholder="Enter Email" required>
-      <input type="password" id="password" placeholder="Enter Password" required>
-      <button type="submit" id="submitBtn">Submit</button>
-    </form>
-    <p class="toggle-link" id="toggleForm">Don't have an account? <strong>Sign Up</strong></p>
-    <div class="users-panel" id="usersPanel">
-      <h3>Saved Users</h3>
-      <ul id="usersList"></ul>
-    </div>
-  </div>
-
+  <!-- Mode Selection Overlay -->
+  <div id="modeOverlay" class="modal-overlay"></div>
+  <!-- Main Authentication Container -->
+  <div id="authContainer" class="auth-container hidden"></div>
+  <!-- Popup Notifications Container -->
+  <div id="popupContainer"></div>
   <script>
-    function getUsers() {
-      let users = localStorage.getItem("users");
-      return users ? JSON.parse(users) : [];
-    }
+    // LocalStorage keys: "adminAccount", "userType", "currentUser"
+    const modeOverlay = document.getElementById("modeOverlay");
+    const authContainer = document.getElementById("authContainer");
+    const popupContainer = document.getElementById("popupContainer");
     
-    function saveUsers(users) {
-      localStorage.setItem("users", JSON.stringify(users));
-    }
+    // Mode Selection: show options with smooth animation
+    modeOverlay.innerHTML = `
+      <div class="modal-content">
+        <h3>Select Access Mode</h3>
+        <button id="userModeBtn" class="btn btn-primary w-100 mb-2">Continue as User</button>
+        <button id="adminModeBtn" class="btn btn-warning w-100">Continue as Admin</button>
+      </div>
+    `;
+    modeOverlay.style.display = "flex";
     
-    function updateUsersPanel() {
-      const usersList = document.getElementById("usersList");
-      usersList.innerHTML = "";
-      const users = getUsers();
-      if (users.length === 0) {
-        usersList.innerHTML = "<li>No users registered yet.</li>";
-      } else {
-        users.forEach(user => {
-          usersList.innerHTML += `<li>${user.email} <i class="fas fa-trash delete-icon" onclick="deleteUser('${user.email}')"></i></li>`;
-        });
-      }
-    }
-    
-    function deleteUser(email) {
-      if (confirm("Are you sure you want to delete this user?")) {
-        let users = getUsers().filter(user => user.email.toLowerCase() !== email.toLowerCase());
-        saveUsers(users);
-        updateUsersPanel();
-        alert("User deleted successfully!");
-      }
-    }
-
-    updateUsersPanel();
-
-    const formTitle = document.getElementById("formTitle");
-    const authForm = document.getElementById("authForm");
-    const toggleForm = document.getElementById("toggleForm");
-
-    let isLogin = true;
-
-    toggleForm.addEventListener("click", function(e) {
-      e.preventDefault();
-      isLogin = !isLogin;
-      formTitle.style.transform = "scale(0.9)";
-      setTimeout(() => {
-        formTitle.textContent = isLogin ? "Login" : "Sign Up";
-        toggleForm.innerHTML = isLogin ? "Don't have an account? <strong>Sign Up</strong>" : "Already have an account? <strong>Login</strong>";
-        formTitle.style.transform = "scale(1)";
-      }, 200);
+    document.getElementById("userModeBtn").addEventListener("click", () => {
+      localStorage.setItem("userType", "user");
+      modeOverlay.style.display = "none";
+      showUserSignupForm();
     });
-
-    authForm.addEventListener("submit", function(e) {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      if (!email || !password) {
-        alert("Please fill in all fields!");
-        return;
+    
+    document.getElementById("adminModeBtn").addEventListener("click", () => {
+      localStorage.setItem("userType", "admin");
+      modeOverlay.style.display = "none";
+      const adminAccount = localStorage.getItem("adminAccount");
+      if (adminAccount) {
+        showAdminLoginForm();
+      } else {
+        showAdminSignupForm();
       }
-
-      let users = getUsers();
-      
-      if (isLogin) {
-        const user = users.find(user => user.email === email && user.password === password);
-        if (user) {
-          alert("Login Successful!");
+    });
+    
+    // Show User Signup Form
+    function showUserSignupForm() {
+      authContainer.innerHTML = `
+        <h2>User Sign Up</h2>
+        <form id="userSignupForm">
+          <input type="text" id="userName" placeholder="Enter Your Name" required>
+          <input type="email" id="userEmail" placeholder="Enter Email" required>
+          <input type="password" id="userPassword" placeholder="Enter Password" required>
+          <button type="submit">Sign Up</button>
+        </form>
+      `;
+      authContainer.classList.remove("hidden");
+      document.getElementById("userSignupForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const name = document.getElementById("userName").value.trim();
+        const email = document.getElementById("userEmail").value.trim();
+        const password = document.getElementById("userPassword").value.trim();
+        const currentUser = { name, email, password };
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        showPopup("User signup successful!", "success");
+        setTimeout(() => {
           window.location.href = "/frontend/public/app-files/management/event.html";
-        } else {
-          alert("Invalid email or password. Please try again!");
+        }, 1500);
+      });
+    }
+    
+    // Show Admin Signup Form
+    function showAdminSignupForm() {
+      authContainer.innerHTML = `
+        <h2>Admin Sign Up</h2>
+        <form id="adminSignupForm">
+          <input type="email" id="adminSignupEmail" placeholder="Enter Admin Email" required>
+          <input type="password" id="adminSignupPassword" placeholder="Enter Password" required>
+          <input type="password" id="adminSignupConfirmPassword" placeholder="Confirm Password" required>
+          <button type="submit">Sign Up</button>
+        </form>
+      `;
+      authContainer.classList.remove("hidden");
+      document.getElementById("adminSignupForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const email = document.getElementById("adminSignupEmail").value.trim();
+        const password = document.getElementById("adminSignupPassword").value.trim();
+        const confirmPassword = document.getElementById("adminSignupConfirmPassword").value.trim();
+        if(password !== confirmPassword) {
+          showPopup("Passwords do not match!", "error");
+          return;
         }
-      } else {
-        const existingUser = users.find(user => user.email === email);
-        if (existingUser) {
-          alert("Email already exists. Please log in!");
+        const adminAccount = { email, password };
+        localStorage.setItem("adminAccount", JSON.stringify(adminAccount));
+        showPopup("Admin signup successful!", "success");
+        setTimeout(showAdminLoginForm, 1500);
+      });
+    }
+    
+    // Show Admin Login Form
+    function showAdminLoginForm() {
+      authContainer.innerHTML = `
+        <h2>Admin Login</h2>
+        <form id="adminLoginForm">
+          <input type="email" id="adminLoginEmail" placeholder="Enter Admin Email" required>
+          <input type="password" id="adminLoginPassword" placeholder="Enter Password" required>
+          <label>
+            <input type="checkbox" id="adminRememberMe"> Remember Me
+          </label>
+          <button type="submit">Login</button>
+        </form>
+      `;
+      authContainer.classList.remove("hidden");
+      document.getElementById("adminLoginForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const email = document.getElementById("adminLoginEmail").value.trim();
+        const password = document.getElementById("adminLoginPassword").value.trim();
+        const rememberMe = document.getElementById("adminRememberMe").checked;
+        const adminAccount = JSON.parse(localStorage.getItem("adminAccount"));
+        if (adminAccount && adminAccount.email === email && adminAccount.password === password) {
+          showPopup("Admin login successful!", "success");
+          if(rememberMe) {
+            localStorage.setItem("adminAuthenticated", "true");
+          } else {
+            localStorage.removeItem("adminAuthenticated");
+          }
+          setTimeout(() => {
+            window.location.href = "/frontend/public/app-files/management/event.html";
+          }, 1500);
         } else {
-          users.push({ email, password });
-          saveUsers(users);
-          alert("Signup Successful! Please log in.");
-          isLogin = true;
-          formTitle.textContent = "Login";
-          toggleForm.innerHTML = "Don't have an account? <strong>Sign Up</strong>";
+          showPopup("Invalid admin credentials!", "error");
         }
-      }
-    });
+      });
+    }
+    
+    // Popup Notification Function
+    function showPopup(message, type) {
+      const popup = document.createElement("div");
+      popup.classList.add("popup", type);
+      popup.textContent = message;
+      popupContainer.appendChild(popup);
+      setTimeout(() => { popup.classList.add("fade-out"); }, 3000);
+      setTimeout(() => { popup.remove(); }, 4000);
+    }
   </script>
 </body>
 </html>
