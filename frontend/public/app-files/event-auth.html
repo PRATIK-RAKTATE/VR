@@ -3,160 +3,290 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Authentication Page</title>
+  <title>Modern Admin Authentication</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
     * { box-sizing: border-box; }
     body {
-      margin: 0; font-family: 'Poppins', sans-serif;
-  
-      display: flex; align-items: center; justify-content: center;
-      min-height: 100vh; color: #333; line-height: 1.6;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ece9e6, #ffffff);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      padding: 20px;
     }
+    /* Main Authentication Container */
     .auth-container {
-      background: #fff; width: 480px; padding: 30px; border-radius: 10px;
-      box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1); text-align: center;
-      animation: fadeIn 0.8s ease-out forwards;
+      background: #fff;
+      width: 400px;
+      max-width: 100%;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeIn 0.8s forwards;
     }
     @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .auth-container h2 {
+      margin-bottom: 25px;
+      font-size: 1.9em;
+      color: #333;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    input {
+      padding: 12px 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border-color 0.3s ease, transform 0.2s ease;
+    }
+    input:focus { 
+      border-color: #ff6600;
+      transform: scale(1.02);
+      outline: none;
+    }
+    button {
+      padding: 12px;
+      background: #ff6600;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    button:hover {
+      background: #e65c00;
+      transform: scale(1.02);
+    }
+    label {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+    }
+    /* Modal Overlay & Content */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 25px 20px;
+      border-radius: 10px;
+      width: 320px;
+      max-width: 90%;
+      text-align: center;
+      animation: popIn 0.5s ease;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-content h3 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .hidden { display: none; }
+    /* Popup Notifications */
+    .popup {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-size: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      opacity: 0;
+      transform: translateY(-20px);
+      z-index: 1100;
+      animation: slideDown 0.5s ease forwards;
+    }
+    .popup.success { background: #28a745; color: #fff; }
+    .popup.error { background: #d32f2f; color: #fff; }
+    @keyframes slideDown {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .auth-container h2 {
-      margin-bottom: 20px; font-weight: 600; color: #333; font-size: 1.8em;
-      transition: transform 0.3s ease-in-out;
+    .fade-out {
+      animation: fadeOut 0.5s ease forwards;
     }
-    form {
-      display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;
+    @keyframes fadeOut {
+      to { opacity: 0; }
     }
-    input {
-      padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px;
-      font-size: 16px; outline: none; transition: border-color 0.3s ease;
-    }
-    input:focus { border-color: #ff6600; transform: scale(1.05); }
-    button {
-      padding: 12px; background: #ff6600; border: none; color: #fff;
-      font-size: 16px; border-radius: 5px; cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease-in-out;
-    }
-    button:hover { background: #e60000; transform: scale(1.05); }
-    .toggle-link {
-      font-size: 14px; margin-top: 10px; color: #ff6600; cursor: pointer;
-      transition: color 0.3s ease-in-out;
-    }
-    .toggle-link:hover { text-decoration: underline; color: #e60000; }
-    .users-panel {
-      margin-top: 20px; text-align: left; font-size: 14px;
-      background: #f9f9f9; border: 1px solid #eee;
-      border-radius: 5px; padding: 10px;
-    }
-    .delete-icon {
-      cursor: pointer; color: red; transition: transform 0.2s ease-in-out;
-    }
-    .delete-icon:hover { transform: scale(1.2); }
   </style>
 </head>
 <body>
-  <div class="auth-container">
-    <h2 id="formTitle">Login</h2>
-    <form id="authForm">
-      <input type="email" id="email" placeholder="Enter Email" required>
-      <input type="password" id="password" placeholder="Enter Password" required>
-      <button type="submit" id="submitBtn">Submit</button>
+  <!-- Modal for Signup / Access Code -->
+  <div id="modalOverlay" class="modal-overlay"></div>
+
+  <!-- Main Admin Login Form Container -->
+  <div class="auth-container" id="adminContainer" style="display: none;">
+    <h2>Admin Login</h2>
+    <form id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Enter Email" required>
+      <input type="password" id="loginPassword" placeholder="Enter Password" required>
+      <label>
+        <input type="checkbox" id="rememberMe"> Remember Me
+      </label>
+      <button type="submit">Login</button>
     </form>
-    <p class="toggle-link" id="toggleForm">Don't have an account? <strong>Sign Up</strong></p>
-    <div class="users-panel" id="usersPanel">
-      <h3>Saved Users</h3>
-      <ul id="usersList"></ul>
-    </div>
   </div>
 
+  <!-- Popup Notifications Container -->
+  <div id="popupContainer"></div>
+
   <script>
-    function getUsers() {
-      let users = localStorage.getItem("users");
-      return users ? JSON.parse(users) : [];
-    }
+    // Storage Keys
+    const ADMIN_ACCOUNT_KEY = "adminAccount";
+    const ADMIN_AUTH_KEY = "adminAuthenticated";
     
-    function saveUsers(users) {
-      localStorage.setItem("users", JSON.stringify(users));
-    }
+    // Get element references
+    const modalOverlay = document.getElementById("modalOverlay");
+    const adminContainer = document.getElementById("adminContainer");
+    const popupContainer = document.getElementById("popupContainer");
     
-    function updateUsersPanel() {
-      const usersList = document.getElementById("usersList");
-      usersList.innerHTML = "";
-      const users = getUsers();
-      if (users.length === 0) {
-        usersList.innerHTML = "<li>No users registered yet.</li>";
+    // On page load, check if admin is authenticated (Remember Me)
+    if(localStorage.getItem(ADMIN_AUTH_KEY) === "true"){
+      modalOverlay.style.display = "none";
+      adminContainer.style.display = "block";
+    } else {
+      // Check if an admin account exists
+      const adminAccount = localStorage.getItem(ADMIN_ACCOUNT_KEY);
+      if(adminAccount) {
+        showAccessCodeModal();
       } else {
-        users.forEach(user => {
-          usersList.innerHTML += `<li>${user.email} <i class="fas fa-trash delete-icon" onclick="deleteUser('${user.email}')"></i></li>`;
-        });
+        showSignupModal();
       }
     }
     
-    function deleteUser(email) {
-      if (confirm("Are you sure you want to delete this user?")) {
-        let users = getUsers().filter(user => user.email.toLowerCase() !== email.toLowerCase());
-        saveUsers(users);
-        updateUsersPanel();
-        alert("User deleted successfully!");
-      }
+    // Show Signup Modal (admin creates email, password, and custom access code)
+    function showSignupModal() {
+      modalOverlay.innerHTML = `
+        <div class="modal-content">
+          <h3>Admin Sign Up</h3>
+          <form id="signupForm">
+            <input type="email" id="signupEmail" placeholder="Admin Email" required>
+            <input type="password" id="signupPassword" placeholder="Password" required>
+            <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
+            <input type="text" id="signupAccessCode" placeholder="Create Access Code" required>
+            <button type="submit">Sign Up</button>
+          </form>
+        </div>
+      `;
+      document.getElementById("signupForm").addEventListener("submit", handleSignup);
     }
-
-    updateUsersPanel();
-
-    const formTitle = document.getElementById("formTitle");
-    const authForm = document.getElementById("authForm");
-    const toggleForm = document.getElementById("toggleForm");
-
-    let isLogin = true;
-
-    toggleForm.addEventListener("click", function(e) {
+    
+    // Handle Admin Signup
+    function handleSignup(e) {
       e.preventDefault();
-      isLogin = !isLogin;
-      formTitle.style.transform = "scale(0.9)";
-      setTimeout(() => {
-        formTitle.textContent = isLogin ? "Login" : "Sign Up";
-        toggleForm.innerHTML = isLogin ? "Don't have an account? <strong>Sign Up</strong>" : "Already have an account? <strong>Login</strong>";
-        formTitle.style.transform = "scale(1)";
-      }, 200);
-    });
-
-    authForm.addEventListener("submit", function(e) {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      if (!email || !password) {
-        alert("Please fill in all fields!");
+      const email = document.getElementById("signupEmail").value.trim();
+      const password = document.getElementById("signupPassword").value.trim();
+      const confirmPassword = document.getElementById("signupConfirmPassword").value.trim();
+      const accessCode = document.getElementById("signupAccessCode").value.trim();
+    
+      if(password !== confirmPassword) {
+        showPopup("Passwords do not match!", "error");
         return;
       }
-
-      let users = getUsers();
-      
-      if (isLogin) {
-        const user = users.find(user => user.email === email && user.password === password);
-        if (user) {
-          alert("Login Successful!");
-          window.location.href = "/frontend/public/app-files/management/event.html";
-        } else {
-          alert("Invalid email or password. Please try again!");
-        }
+      // Save the admin account in localStorage
+      const adminAccount = { email, password, accessCode };
+      localStorage.setItem(ADMIN_ACCOUNT_KEY, JSON.stringify(adminAccount));
+      showPopup("Signup successful! Enter access code.", "success");
+      setTimeout(showAccessCodeModal, 1500);
+    }
+    
+    // Show Access Code Modal
+    function showAccessCodeModal() {
+      modalOverlay.innerHTML = `
+        <div class="modal-content">
+          <h3>Enter Access Code</h3>
+          <form id="accessCodeForm">
+            <input type="text" id="enteredAccessCode" placeholder="Access Code" required>
+            <button type="submit">Submit</button>
+          </form>
+          <p id="accessError" style="color:#d32f2f; display:none; margin-top:10px;">Invalid access code!</p>
+        </div>
+      `;
+      document.getElementById("accessCodeForm").addEventListener("submit", handleAccessCode);
+    }
+    
+    // Validate Access Code
+    function handleAccessCode(e) {
+      e.preventDefault();
+      const enteredCode = document.getElementById("enteredAccessCode").value.trim();
+      const adminAccount = JSON.parse(localStorage.getItem(ADMIN_ACCOUNT_KEY));
+      if(adminAccount && enteredCode === adminAccount.accessCode) {
+        modalOverlay.style.display = "none";
+        adminContainer.style.display = "block";
       } else {
-        const existingUser = users.find(user => user.email === email);
-        if (existingUser) {
-          alert("Email already exists. Please log in!");
+        document.getElementById("accessError").style.display = "block";
+        showPopup("Incorrect access code!", "error");
+      }
+    }
+    
+    // Admin Login Form Functionality
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+      const rememberMe = document.getElementById("rememberMe").checked;
+      const adminAccount = JSON.parse(localStorage.getItem(ADMIN_ACCOUNT_KEY));
+    
+      if(adminAccount && adminAccount.email === email && adminAccount.password === password) {
+        showPopup("Login successful!", "success");
+        if(rememberMe) {
+          localStorage.setItem(ADMIN_AUTH_KEY, "true");
         } else {
-          users.push({ email, password });
-          saveUsers(users);
-          alert("Signup Successful! Please log in.");
-          isLogin = true;
-          formTitle.textContent = "Login";
-          toggleForm.innerHTML = "Don't have an account? <strong>Sign Up</strong>";
+          localStorage.removeItem(ADMIN_AUTH_KEY);
         }
+        // Redirect after a short delay to event.html
+        setTimeout(() => {
+          window.location.href = "/frontend/public/app-files/management/event.html";
+        }, 1500);
+      } else {
+        showPopup("Invalid credentials. Please try again.", "error");
       }
     });
+    
+    // Function to display popup notifications
+    function showPopup(message, type) {
+      const popup = document.createElement("div");
+      popup.classList.add("popup", type);
+      popup.textContent = message;
+      popupContainer.appendChild(popup);
+      // Remove popup after 4 seconds
+      setTimeout(() => {
+        popup.classList.add("fade-out");
+      }, 3000);
+      setTimeout(() => {
+        popup.remove();
+      }, 4000);
+    }
   </script>
 </body>
 </html>
