@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>3D Observatory</title>
+  <title>PVG Virtual Tour</title>
   <meta charset="utf-8" />
   <meta name="viewport"
     content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
@@ -26,86 +26,37 @@
   
   <div id="sceneList">
     <ul class="scenes">
-      <!-- replace with pvg logo -->
       <img src="/frontend/public/app-files/img/pvg_logo.png" style=" height: 2.5rem;" alt="logo">
-
-      <!-- <select id="sceneDropdown">
-          <option value="0-telescopes">Telescopes</option>
-          <option value="1-observatry">Observatry</option>
-          <option value="0-comp">Computer Department</option>
-          <option value="2-new-home">New Home</option>
-          <option value="3-dom">Dom</option>
-        </select> -->
 
       <select id="sceneDropdown">
         <optgroup label="Campus View">
-          <option value="4-checkpost">Entry</option>
-          <option value="3-building-in-construction">Campus</option>
-          <option value="4-building-parking">Parking</option>
-          <option value="1-computerlab">Computer Department</option>
-          <option value="1-entry-account-section">Account Section</option>
-          <option value="1-interview-cabin-1">Interview-cabin-1</option>
+          <option value="19-collage">Campus View</option>
+          <option value="6-4-entries">Entry</option>
+          <option value="7-classroom">Classrom</option>
+          <option value="10-principal-cabin">Principal</option>
+          <option value="11-secretory-cabin">Secretory</option>
+          <option value="17-old-building">Old Building</option>
+          <option value="18-new-building">New Building</option>
         </optgroup>
       </select>
 
       <select id="sceneDropdown2">
-        
-        <optgroup label="Computer Department">
-          <option value="1-computerlab">Computer Department</option>
-          <option value="5-entry-principal">Entry-view</option>
-          <option value="2-notice-board-admission-section-entry">Notice board</option>
-          <option value="3-seminarhall">Seminar Hall</option>
-        </optgroup>
-        
+        <option value="19-collage">Our Campus</option>
+        <option value="0-bus-parking">Parking</option>
+        <option value="1-canteen">Canteen</option>
+        <option value="8-seminar-hall">Seminar Hall</option>
+        <option value="3-mechanical-dept">Mechanical Dept</option>
+        <option value="13-meeting-hall">Meeeting Hall</option>
       </select>
-        <!-- <optgroup label="New Building - Ground Floor">
-          <option value="new-ground-classrooms">Computer Dept</option>
-          <option value="new-ground-computer">Computer Center (007)</option>
-          <option value="new-ground-mechanical">Mechanical Department</option>
-          <option value="new-ground-seminar">Seminar Hall (016)</option>
-          <option value="new-ground-account">Account Section (A1)</option>
-          <option value="new-ground-principal">Principal Office (A3)</option>
-          <option value="new-ground-tpo">TPO Office (A6)</option>
-          <option value="new-ground-director">Director Office (A4)</option>
-          <option value="new-ground-student">Student Section (A7)</option>
-        </optgroup>
-        <optgroup label="New Building - Basement">
-          <option value="new-basement-aids">AIDS HOD (B1)</option>
-          <option value="new-basement-ai">
-            Artificial Intelligence Lab (B2)
-          </option>
-          <option value="new-basement-cloud">Cloud Computing Lab (B3)</option>
-        </optgroup>
-        <optgroup label="Old Building - Ground Floor">
-          <option value="old-ground-medical">Medical Room</option>
-          <option value="old-ground-nss">NSS SDO Office</option>
-          <option value="old-ground-sports">Sports Room</option>
-          <option value="old-ground-computerlab1">Computer Lab 1</option>
-          <option value="old-ground-workshop">Workshop</option>
-        </optgroup>
-        <optgroup label="Old Building - 1st Floor">
-          <option value="old-first-computerlab">Computer Lab</option>
-          <option value="old-first-tutorial">Tutorial Room</option>
-          <option value="old-first-mba">MBA Staff Room</option>
-          <option value="old-first-seminar">Seminar Hall</option>
-        </optgroup>
-        <optgroup label="Old Building - 2nd Floor">
-          <option value="old-second-hardware">Hardware Lab</option>
-          <option value="old-second-project">Project Lab (IT)</option>
-          <option value="old-second-incubation">Incubation Center</option>
-        </optgroup>
-        <optgroup label="Premises Spots">
-          <option value="premises-360view">360° View of Whole Campus</option>
-          <option value="premises-entry">Entry Gate</option>
-          <option value="premises-oldentrance">Old Building Entrance</option>
-          <option value="premises-ground">Ground</option>
-          <option value="premises-shadeparking">Shade Parking</option>
-          <option value="premises-exam">Exam Centre Parking</option>
-          <option value="premises-canteen">Canteen</option>
-          <option value="premises-bike">Bike Parking</option>
-          <option value="premises-office">Office Entrance</option>
-          <option value="premises-aids">AIDS Department Entrance</option>
-        </optgroup> -->
+
+      <select id="sceneDropdown3">
+          <option value="19-collage">AIDS Department</option>
+          <option value="7-classroom">Classrom</option>
+          <option value="9-computer-center">Computer Center</option>
+          <option value="12-exam-section">Exam section</option>
+          <option value="14-account-section">Account Section</option>
+            
+      </select>
 
         <a href="../app-files/event-auth.html">
           <button class="event-btn mx-3">Event</button>
@@ -120,87 +71,69 @@
           <button class="collegebtn mx-3">Contact Us</button>
         </a>
 
-      <a href="javascript:void(0)" class="scene" data-id="0-computer-lab">
-        <!-- <li class="text">computer-lab</li> -->
-      </a>
+        <a href="javascript:void(0)" class="scene" data-id="19-collage">
+        </a>
 
-      <a href="javascript:void(0)" class="scene" data-id="2-building-in-construction">
-      </a>
-
-      <a href="javascript:void(0)" class="scene" data-id="4-entry-principal">
-      </a>
-
-      <a href="javascript:void(0)" class="scene" data-id="1-entry-account-section">
-      </a>
-
-      <a href="javascript:void(0)" class="scene" data-id="3-library-2-1">
-      </a>
-
-      <a href="javascript:void(0)" class="scene" data-id="0-telescopes">
-        <!-- <li class="text">Telescopes</li> -->
-      </a>
-
-      <a href="javascript:void(0)" class="scene" data-id="0-comp">
-        <!-- <li class="text">Telescopes</li> -->
-      </a>
-
-      <a href="javascript:void(0)" class="scene" data-id="1-classroom">
-        <!-- <li class="text">Telescopes</li> -->
-      </a>
-
-      <a href="javascript:void(0)" class="scene" data-id="0-library"> </a>
-
-      <a href="javascript:void(0)" class="scene" data-id="1-observatry">
-        <!-- <li class="text">Observatry</li> -->
-      </a>
-
-      <a href="javascript:void(0)" class="scene" data-id="2-new-home">
-        <!-- <li class="text">new home</li> -->
-      </a>
-
-      <a href="javascript:void(0)" class="scene" data-id="3-dom">
-        <!-- <li class="text">dom</li> -->
-      </a>
-
-      <a href="javascript:void(0)" class="scene" data-id="0-entries">
-        <!-- <li class="text">entries</li> -->
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="1-interview-cabin-1">
-        <!-- <li class="text">Interview-cabin-1</li> -->
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="2-notice-board-admission-section-entry">
-        <!-- <li class="text">notice-board-admission-section-entry</li> -->
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="3-building-in-construction">
-        <!-- <li class="text">building-in-construction</li> -->
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="4-building-parking">
-        <!-- <li class="text">building-parking</li> -->
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="5-entry-principal">
-        <!-- <li class="text">entry-principal</li> -->
-      </a>
-
-      <a href="javascript:void(0)" class="scene" data-id="0-building-side-view">
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="1-computerlab">
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="2-classroom">
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="3-seminarhall">
-      </a>
-    
-      <a href="javascript:void(0)" class="scene" data-id="4-checkpost">
-      </a>
+        <a href="javascript:void(0)" class="scene" data-id="1-canteen">
+        </a>
+        
+        <a href="javascript:void(0)" class="scene" data-id="0-bus-parking">
+        </a>
       
+      
+        <a href="javascript:void(0)" class="scene" data-id="2-collage-view">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="3-mechanical-dept">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="4-physics-lab">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="5-aids-labs">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="6-4-entries">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="7-classroom">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="8-seminar-hall">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="9-computer-center">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="10-principal-cabin">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="11-secretory-cabin">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="12-exam-section">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="13-meeting-hall">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="14-account-section">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="15-workshop">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="16-administative-section">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="17-old-building">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="18-new-building">
+        </a>
+      
+        <a href="javascript:void(0)" class="scene" data-id="20-new-building">
+        </a>
     </ul>
   </div>
 
