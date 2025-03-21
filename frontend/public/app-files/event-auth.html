@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modern Admin Authentication</title>
+  <title>Event Authentication</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
@@ -16,7 +16,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow-x: hidden;
       padding: 20px;
     }
     /* Main Authentication Container */
@@ -26,17 +25,18 @@
       max-width: 100%;
       padding: 40px 30px;
       border-radius: 12px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
       text-align: center;
       opacity: 0;
       transform: translateY(30px);
       animation: fadeIn 0.8s forwards;
+      transition: transform 0.3s ease;
+    }
+    .auth-container:hover {
+      transform: translateY(0);
     }
     @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      to { opacity: 1; transform: translateY(0); }
     }
     .auth-container h2 {
       margin-bottom: 25px;
@@ -74,13 +74,6 @@
       background: #e65c00;
       transform: scale(1.02);
     }
-    label {
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #555;
-    }
     /* Modal Overlay & Content */
     .modal-overlay {
       position: fixed;
@@ -88,11 +81,16 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.65);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
+      z-index: 2000;
+      animation: fadeInOverlay 0.6s ease;
+    }
+    @keyframes fadeInOverlay {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     .modal-content {
       background: #fff;
@@ -102,6 +100,7 @@
       max-width: 90%;
       text-align: center;
       animation: popIn 0.5s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
     @keyframes popIn {
       from { transform: scale(0.7); opacity: 0; }
@@ -111,8 +110,15 @@
       margin-bottom: 20px;
       color: #333;
     }
+    .modal-content button {
+      margin: 8px 0;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .modal-content button:hover {
+      transform: scale(1.02);
+    }
     .hidden { display: none; }
-    /* Popup Notifications */
+    /* Popup notifications */
     .popup {
       position: fixed;
       top: 20px;
@@ -120,10 +126,10 @@
       padding: 12px 20px;
       border-radius: 5px;
       font-size: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
       opacity: 0;
       transform: translateY(-20px);
-      z-index: 1100;
+      z-index: 2100;
       animation: slideDown 0.5s ease forwards;
     }
     .popup.success { background: #28a745; color: #fff; }
@@ -132,160 +138,148 @@
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .fade-out {
-      animation: fadeOut 0.5s ease forwards;
-    }
-    @keyframes fadeOut {
-      to { opacity: 0; }
-    }
+    .fade-out { animation: fadeOut 0.5s ease forwards; }
+    @keyframes fadeOut { to { opacity: 0; } }
   </style>
 </head>
 <body>
-  <!-- Modal for Signup / Access Code -->
-  <div id="modalOverlay" class="modal-overlay"></div>
-
-  <!-- Main Admin Login Form Container -->
-  <div class="auth-container" id="adminContainer" style="display: none;">
-    <h2>Admin Login</h2>
-    <form id="loginForm">
-      <input type="email" id="loginEmail" placeholder="Enter Email" required>
-      <input type="password" id="loginPassword" placeholder="Enter Password" required>
-      <label>
-        <input type="checkbox" id="rememberMe"> Remember Me
-      </label>
-      <button type="submit">Login</button>
-    </form>
-  </div>
-
+  <!-- Mode Selection Overlay -->
+  <div id="modeOverlay" class="modal-overlay"></div>
+  <!-- Main Authentication Container -->
+  <div id="authContainer" class="auth-container hidden"></div>
   <!-- Popup Notifications Container -->
   <div id="popupContainer"></div>
-
   <script>
-    // Storage Keys
-    const ADMIN_ACCOUNT_KEY = "adminAccount";
-    const ADMIN_AUTH_KEY = "adminAuthenticated";
-    
-    // Get element references
-    const modalOverlay = document.getElementById("modalOverlay");
-    const adminContainer = document.getElementById("adminContainer");
+    // LocalStorage keys: "adminAccount", "userType", "currentUser"
+    const modeOverlay = document.getElementById("modeOverlay");
+    const authContainer = document.getElementById("authContainer");
     const popupContainer = document.getElementById("popupContainer");
     
-    // On page load, check if admin is authenticated (Remember Me)
-    if(localStorage.getItem(ADMIN_AUTH_KEY) === "true"){
-      modalOverlay.style.display = "none";
-      adminContainer.style.display = "block";
-    } else {
-      // Check if an admin account exists
-      const adminAccount = localStorage.getItem(ADMIN_ACCOUNT_KEY);
-      if(adminAccount) {
-        showAccessCodeModal();
+    // Mode Selection: show options with smooth animation
+    modeOverlay.innerHTML = `
+      <div class="modal-content">
+        <h3>Select Access Mode</h3>
+        <button id="userModeBtn" class="btn btn-primary w-100 mb-2">Continue as User</button>
+        <button id="adminModeBtn" class="btn btn-warning w-100">Continue as Admin</button>
+      </div>
+    `;
+    modeOverlay.style.display = "flex";
+    
+    document.getElementById("userModeBtn").addEventListener("click", () => {
+      localStorage.setItem("userType", "user");
+      modeOverlay.style.display = "none";
+      showUserSignupForm();
+    });
+    
+    document.getElementById("adminModeBtn").addEventListener("click", () => {
+      localStorage.setItem("userType", "admin");
+      modeOverlay.style.display = "none";
+      const adminAccount = localStorage.getItem("adminAccount");
+      if (adminAccount) {
+        showAdminLoginForm();
       } else {
-        showSignupModal();
-      }
-    }
-    
-    // Show Signup Modal (admin creates email, password, and custom access code)
-    function showSignupModal() {
-      modalOverlay.innerHTML = `
-        <div class="modal-content">
-          <h3>Admin Sign Up</h3>
-          <form id="signupForm">
-            <input type="email" id="signupEmail" placeholder="Admin Email" required>
-            <input type="password" id="signupPassword" placeholder="Password" required>
-            <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
-            <input type="text" id="signupAccessCode" placeholder="Create Access Code" required>
-            <button type="submit">Sign Up</button>
-          </form>
-        </div>
-      `;
-      document.getElementById("signupForm").addEventListener("submit", handleSignup);
-    }
-    
-    // Handle Admin Signup
-    function handleSignup(e) {
-      e.preventDefault();
-      const email = document.getElementById("signupEmail").value.trim();
-      const password = document.getElementById("signupPassword").value.trim();
-      const confirmPassword = document.getElementById("signupConfirmPassword").value.trim();
-      const accessCode = document.getElementById("signupAccessCode").value.trim();
-    
-      if(password !== confirmPassword) {
-        showPopup("Passwords do not match!", "error");
-        return;
-      }
-      // Save the admin account in localStorage
-      const adminAccount = { email, password, accessCode };
-      localStorage.setItem(ADMIN_ACCOUNT_KEY, JSON.stringify(adminAccount));
-      showPopup("Signup successful! Enter access code.", "success");
-      setTimeout(showAccessCodeModal, 1500);
-    }
-    
-    // Show Access Code Modal
-    function showAccessCodeModal() {
-      modalOverlay.innerHTML = `
-        <div class="modal-content">
-          <h3>Enter Access Code</h3>
-          <form id="accessCodeForm">
-            <input type="text" id="enteredAccessCode" placeholder="Access Code" required>
-            <button type="submit">Submit</button>
-          </form>
-          <p id="accessError" style="color:#d32f2f; display:none; margin-top:10px;">Invalid access code!</p>
-        </div>
-      `;
-      document.getElementById("accessCodeForm").addEventListener("submit", handleAccessCode);
-    }
-    
-    // Validate Access Code
-    function handleAccessCode(e) {
-      e.preventDefault();
-      const enteredCode = document.getElementById("enteredAccessCode").value.trim();
-      const adminAccount = JSON.parse(localStorage.getItem(ADMIN_ACCOUNT_KEY));
-      if(adminAccount && enteredCode === adminAccount.accessCode) {
-        modalOverlay.style.display = "none";
-        adminContainer.style.display = "block";
-      } else {
-        document.getElementById("accessError").style.display = "block";
-        showPopup("Incorrect access code!", "error");
-      }
-    }
-    
-    // Admin Login Form Functionality
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const email = document.getElementById("loginEmail").value.trim();
-      const password = document.getElementById("loginPassword").value.trim();
-      const rememberMe = document.getElementById("rememberMe").checked;
-      const adminAccount = JSON.parse(localStorage.getItem(ADMIN_ACCOUNT_KEY));
-    
-      if(adminAccount && adminAccount.email === email && adminAccount.password === password) {
-        showPopup("Login successful!", "success");
-        if(rememberMe) {
-          localStorage.setItem(ADMIN_AUTH_KEY, "true");
-        } else {
-          localStorage.removeItem(ADMIN_AUTH_KEY);
-        }
-        // Redirect after a short delay to event.html
-        setTimeout(() => {
-          window.location.href = "/frontend/public/app-files/management/event.html";
-        }, 1500);
-      } else {
-        showPopup("Invalid credentials. Please try again.", "error");
+        showAdminSignupForm();
       }
     });
     
-    // Function to display popup notifications
+    // Show User Signup Form
+    function showUserSignupForm() {
+      authContainer.innerHTML = `
+        <h2>User Sign Up</h2>
+        <form id="userSignupForm">
+          <input type="text" id="userName" placeholder="Enter Your Name" required>
+          <input type="email" id="userEmail" placeholder="Enter Email" required>
+          <input type="password" id="userPassword" placeholder="Enter Password" required>
+          <button type="submit">Sign Up</button>
+        </form>
+      `;
+      authContainer.classList.remove("hidden");
+      document.getElementById("userSignupForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const name = document.getElementById("userName").value.trim();
+        const email = document.getElementById("userEmail").value.trim();
+        const password = document.getElementById("userPassword").value.trim();
+        const currentUser = { name, email, password };
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        showPopup("User signup successful!", "success");
+        setTimeout(() => {
+          window.location.href = "/frontend/public/app-files/management/event.html";
+        }, 1500);
+      });
+    }
+    
+    // Show Admin Signup Form
+    function showAdminSignupForm() {
+      authContainer.innerHTML = `
+        <h2>Admin Sign Up</h2>
+        <form id="adminSignupForm">
+          <input type="email" id="adminSignupEmail" placeholder="Enter Admin Email" required>
+          <input type="password" id="adminSignupPassword" placeholder="Enter Password" required>
+          <input type="password" id="adminSignupConfirmPassword" placeholder="Confirm Password" required>
+          <button type="submit">Sign Up</button>
+        </form>
+      `;
+      authContainer.classList.remove("hidden");
+      document.getElementById("adminSignupForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const email = document.getElementById("adminSignupEmail").value.trim();
+        const password = document.getElementById("adminSignupPassword").value.trim();
+        const confirmPassword = document.getElementById("adminSignupConfirmPassword").value.trim();
+        if(password !== confirmPassword) {
+          showPopup("Passwords do not match!", "error");
+          return;
+        }
+        const adminAccount = { email, password };
+        localStorage.setItem("adminAccount", JSON.stringify(adminAccount));
+        showPopup("Admin signup successful!", "success");
+        setTimeout(showAdminLoginForm, 1500);
+      });
+    }
+    
+    // Show Admin Login Form
+    function showAdminLoginForm() {
+      authContainer.innerHTML = `
+        <h2>Admin Login</h2>
+        <form id="adminLoginForm">
+          <input type="email" id="adminLoginEmail" placeholder="Enter Admin Email" required>
+          <input type="password" id="adminLoginPassword" placeholder="Enter Password" required>
+          <label>
+            <input type="checkbox" id="adminRememberMe"> Remember Me
+          </label>
+          <button type="submit">Login</button>
+        </form>
+      `;
+      authContainer.classList.remove("hidden");
+      document.getElementById("adminLoginForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const email = document.getElementById("adminLoginEmail").value.trim();
+        const password = document.getElementById("adminLoginPassword").value.trim();
+        const rememberMe = document.getElementById("adminRememberMe").checked;
+        const adminAccount = JSON.parse(localStorage.getItem("adminAccount"));
+        if (adminAccount && adminAccount.email === email && adminAccount.password === password) {
+          showPopup("Admin login successful!", "success");
+          if(rememberMe) {
+            localStorage.setItem("adminAuthenticated", "true");
+          } else {
+            localStorage.removeItem("adminAuthenticated");
+          }
+          setTimeout(() => {
+            window.location.href = "/frontend/public/app-files/management/event.html";
+          }, 1500);
+        } else {
+          showPopup("Invalid admin credentials!", "error");
+        }
+      });
+    }
+    
+    // Popup Notification Function
     function showPopup(message, type) {
       const popup = document.createElement("div");
       popup.classList.add("popup", type);
       popup.textContent = message;
       popupContainer.appendChild(popup);
-      // Remove popup after 4 seconds
-      setTimeout(() => {
-        popup.classList.add("fade-out");
-      }, 3000);
-      setTimeout(() => {
-        popup.remove();
-      }, 4000);
+      setTimeout(() => { popup.classList.add("fade-out"); }, 3000);
+      setTimeout(() => { popup.remove(); }, 4000);
     }
   </script>
 </body>
