@@ -222,54 +222,63 @@
       });
 
       //audio
-      let dropdown = document.getElementById("sceneDropdown");
-      let audioPlayer = document.getElementById("audioPlayer");
+      document.addEventListener("DOMContentLoaded", function () {
+  let audioPlayer = document.getElementById("audioPlayer");
 
-      dropdown.addEventListener("change", function () {
-        let selectedValue = dropdown.value; // Get selected value
-        let audioSrc = "audio/scene1.mp3"; // Default empty audio source
+  function playAudio(selectedValue) {
+    let audioSrc = null; // Default to null for no selection
 
-        // Use switch case to assign the correct audio file
-        switch (selectedValue) {
-          case "3-building-in-construction":
-            audioSrc = "audio/Ourcampus.mp3";
-            break;
-          case "0-computer-lab":
-            audioSrc = "audio/computerlab.mp3";
-            break;
-          case "4-building-parking":
-            audioSrc = "audio/parking.mp3";
-            break;
-          case "2-notice-board-admission-section-entry":
-            audioSrc = "audio/CentralEnterance.mp3";
-            break;
-          case "1-entry-account-section":
-            audioSrc = "audio/accountsection.mp3";
-            break;
-          case "1-interview-cabin-1":
-            audioSrc = "audio/interviewCabin.mp3";
-            break;
-          case "5-entry-principal":
-            audioSrc = "audio/CentralEnterance.mp3";
-            break;
-          case "5-entry-principal":
-            audioSrc = "audio/CentralEnterance.mp3";
-            break;
-          default:
-            audioSrc = ""; // No valid selection
-        }
+    // Mapping scene IDs to audio files
+    const audioMap = {
+      "19-collage": "audio/Ourcampus.mp3",
+      "6-4-entries": "audio/CentralEnterance.mp3",
+      "7-classroom": "audio/classroom.mp3",
+      "10-principal-cabin": "audio/CentralEnterance.mp3",
+      "11-secretory-cabin": "audio/secretoryCabin.mp3",
+      "17-old-building": "audio/oldBuilding.mp3",
+      "18-new-building": "audio/newBuilding.mp3",
+      "0-bus-parking": "audio/parking.mp3",
+      "1-canteen": "audio/canteen.mp3",
+      "8-seminar-hall": "audio/seminarHall.mp3",
+      "3-mechanical-dept": "audio/mechanicalDept.mp3",
+      "13-meeting-hall": "audio/meetingHall.mp3",
+      "9-computer-center": "audio/computerlab.mp3",
+      "12-exam-section": "audio/examSection.mp3",
+      "14-account-section": "audio/accountsection.mp3",
+    };
 
-        if (audioSrc) {
-          audioPlayer.src = audioSrc;
-          audioPlayer.load(); // Ensure the audio file is loaded
-          audioPlayer
-            .play()
-            .catch((error) => console.log("Autoplay blocked:", error));
-        } else {
-          audioPlayer.pause();
-          audioPlayer.currentTime = 0;
-        }
-      });
+    // Get the audio file based on the selected value
+    if (audioMap[selectedValue]) {
+      audioSrc = audioMap[selectedValue];
+    }
+
+    if (audioSrc) {
+      audioPlayer.src = audioSrc;
+      audioPlayer.load(); // Ensure the audio file is loaded
+      audioPlayer
+        .play()
+        .catch((error) => console.log("Autoplay blocked:", error));
+    } else {
+      audioPlayer.pause();
+      audioPlayer.currentTime = 0;
+    }
+  }
+
+  // Function to add event listeners to all dropdowns
+  function addDropdownListeners(dropdownId) {
+    let dropdown = document.getElementById(dropdownId);
+    dropdown.addEventListener("change", function () {
+      playAudio(dropdown.value);
+    });
+  }
+
+  // Add event listeners to all dropdowns
+  addDropdownListeners("sceneDropdown");
+  addDropdownListeners("sceneDropdown2");
+  addDropdownListeners("sceneDropdown3");
+});
+
+
 
       // Toggle chat popup visibility
 const chatbotIcon = document.getElementById('chatbotIcon');
