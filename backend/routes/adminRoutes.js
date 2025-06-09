@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { 
-  getAdminDashboard
-} = require('../controllers/adminController');
+const { getAdminDashboard } = require('../controllers/adminController');
 const { protect, isAdmin } = require('../middleware/authMiddleware');
 
-    // Admin-only 
+// Admin-only
 router.get('/dashboard', protect, isAdmin, getAdminDashboard);
 
-module.exports = router; 
+module.exports = router;

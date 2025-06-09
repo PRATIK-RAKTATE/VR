@@ -71,7 +71,6 @@ const roleCheck = (role) => {
   };
 };
 
-
 const isAdmin = roleCheck('admin');
 const isUser = roleCheck('user');
 
